@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Mess Calculation System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --primary-light: #e0e7ff;
+      --secondary: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg: #f9fafb;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --success: #16a34a;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --radius: 12px;
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+    }
+    
+    body { 
+      background: var(--bg); 
+      color: var(--text); 
+      line-height: 1.6;
+      padding: 15px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px; 
+      margin: auto;
+      background: var(--card-bg);
+      padding: 20px; 
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    
+    header {
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 12px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .logo {
+      width: 45px; 
+      height: 45px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+    }
+    
+    .header-text {
+      text-align: center;
+    }
+    
+    header h1 {
+      font-size: 1.6rem; 
+      color: var(--primary); 
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    header p {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    
+    .designer-credit {
+      text-align: center;
+      margin-top: 5px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    
+    .designer-credit a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .card-title i {
+      font-size: 0.9rem;
+    }
+    
+    .flex { 
+      display: flex; 
+      gap: 12px; 
+      flex-wrap: wrap; 
+    }
+    
+    .flex > div { 
+      flex: 1; 
+      min-width: 150px; 
+    }
+    
+    label { 
+      display: block; 
+      font-weight: 600; 
+      margin: 12px 0 5px; 
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    input, select {
+      width: 100%; 
+      padding: 10px; 
+      border: 1px solid var(--border);
+      border-radius: 8px; 
+      font-size: 0.9rem; 
+      transition: all 0.2s;
+      background: var(--card-bg);
+    }
+    
+    input:focus, select:focus { 
+      border-color: var(--primary); 
+      outline: none;
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    
+    .toggle {
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+    
+    .toggle input[type="checkbox"] { 
+      display: none; 
+    }
+    
+    .toggle label {
+      width: 45px; 
+      height: 22px; 
+      background: #d1d5db; 
+      border-radius: 20px;
+      position: relative; 
+      cursor: pointer;
+      margin: 0;
+    }
+    
+    .toggle label::after {
+      content: ""; 
+      position: absolute; 
+      width: 18px; 
+      height: 18px;
+      border-radius: 50%; 
+      top: 2px; 
+      left: 2px;
+      background: white; 
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .toggle input:checked + label { 
+      background: var(--primary); 
+    }
+    
+    .toggle input:checked + label::after { 
+      transform: translateX(23px); 
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      margin-top: 15px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      min-width: 700px;
+    }
+    
+    thead { 
+      background: var(--primary); 
+      color: white; 
+    }
+    
+    th, td { 
+      padding: 10px; 
+      text-align: center; 
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    
+    tbody tr:nth-child(even) { 
+      background: #f8fafc; 
+    }
+    
+    tbody tr:hover {
+      background: var(--primary-light);
+    }
+    
+    .btn {
+      background: var(--primary); 
+      color: white; 
+      border: none;
+      padding: 10px 16px; 
+      border-radius: 8px; 
+      cursor: pointer;
+      font-weight: 600; 
+      transition: all 0.2s;
+      margin: 8px 4px 0 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    
+    .btn:hover { 
+      background: var(--primary-dark); 
+      transform: translateY(-2px); 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn:active { 
+      transform: translateY(0); 
+    }
+    
+    .btn-danger { 
+      background: var(--danger); 
+    }
+    
+    .btn-success { 
+      background: var(--success); 
+    }
+    
+    .btn-warning { 
+      background: var(--warning); 
+    }
+    
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      margin: 8px 0;
+    }
+    
+    .result {
+      margin-top: 20px; 
+      padding: 15px; 
+      background: #eef2ff;
+      border-left: 4px solid var(--primary); 
+      border-radius: 10px;
+      display: none;
+    }
+    
+    .status-positive { 
+      color: var(--success); 
+      font-weight: bold; 
+    }
+    
+    .status-negative { 
+      color: var(--danger); 
+      font-weight: bold; 
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .summary-item {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .summary-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 5px 0;
+    }
+    
+    .summary-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    
+    .instructions {
+      background: var(--primary-light);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 0.85rem;
+    }
+    
+    .instructions h4 {
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+    
+    .instructions ul {
+      padding-left: 18px;
+    }
+    
+    .instructions li {
+      margin-bottom: 4px;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    /* Mobile-specific styles */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      .container {
+        padding: 15px;
+      }
+      
+      header {
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      
+      header h1 {
+        font-size: 1.4rem;
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+      }
+      
+      .card {
+        padding: 12px;
+        margin-bottom: 15px;
+      }
+      
+      .card-title {
+        font-size: 1rem;
+      }
+      
+      .flex {
+        gap: 10px;
+      }
+      
+      .flex > div {
+        min-width: 100%;
+      }
+      
+      input, select {
+        padding: 8px;
+        font-size: 0.85rem;
+      }
+      
+      .table-container {
+        margin-top: 12px;
+      }
+      
+      th, td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+      }
+      
+      .btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+      
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      
+      .summary-item {
+        padding: 10px;
+      }
+      
+      .summary-value {
+        font-size: 1.1rem;
+      }
+      
+      .summary-label {
+        font-size: 0.75rem;
+      }
+      
+      .result {
+        padding: 12px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+      }
+      
+      .container {
+        padding: 12px;
+      }
+      
+      header h1 {
+        font-size: 1.2rem;
+      }
+      
+      header p {
+        font-size: 0.8rem;
+      }
+      
+      .card {
+        padding: 10px;
+      }
+      
+      .flex {
+        gap: 8px;
+      }
+      
+      .table-container {
+        border-radius: 8px;
+      }
+      
+      th, td {
+        padding: 6px 4px;
+        font-size: 0.75rem;
+      }
+      
+      .btn {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+      }
+      
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .btn-full {
+        width: 100%;
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      .btn, .toggle, .instructions, footer {
+        display: none !important;
+      }
+      
+      .container {
+        box-shadow: none;
+        padding: 0;
+      }
+      
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-calculator"></i>
+      </div>
+      <div class="header-text">
+        <h1>Smart Mess Calculation System</h1>
+        <p>Efficiently manage and calculate meal expenses for your mess</p>
+        <div class="designer-credit">
+          Designed by <a href="mailto:hafizur.rahman@sec.ac.bd">Hafizur Rahman</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-cog"></i>
+        Mess Configuration
+      </div>
+      <div class="flex">
+        <div>
+          <label for="messName">Mess Name:</label>
+          <div class="input-group">
+            <input type="text" id="messName" placeholder="Enter mess name" value="Hafiz">
+          </div>
+        </div>
+        <div>
+          <label for="month">Month:</label>
+          <div class="input-group">
+            <input type="month" id="month">
+          </div>
+        </div>
+      </div>
+
+      <div class="flex">
+        <div>
+          <label for="totalCost">Total Meal Cost:</label>
+          <div class="input-group">
+            <input type="number" id="totalCost" placeholder="Enter total cost">
+          </div>
+        </div>
+        <div>
+          <label for="dayPercent">Day Meal %:</label>
+          <div class="input-group">
+            <input type="number" id="dayPercent" value="45" min="0" max="100" oninput="syncPercent('day')">
+          </div>
+        </div>
+        <div>
+          <label for="nightPercent">Night Meal %:</label>
+          <div class="input-group">
+            <input type="number" id="nightPercent" value="55" min="0" max="100" oninput="syncPercent('night')">
+          </div>
+        </div>
+        <div id="breakfastDiv" style="display:none;">
+          <label for="breakfastPercent">Breakfast %:</label>
+          <div class="input-group">
+            <input type="number" id="breakfastPercent" value="0" min="0" max="100" oninput="syncPercent('breakfast')">
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle">
+        <span>Include Breakfast in Calculation?</span>
+        <input type="checkbox" id="breakfastToggle" onchange="toggleBreakfast(this)">
+        <label for="breakfastToggle"></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-users"></i>
+        Member Management
+      </div>
+      <div class="table-container">
+        <table id="memberTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Deposit</th>
+              <th>Day Meals</th>
+              <th>Night Meals</th>
+              <th class="breakfast-col" style="display:none;">Breakfast</th>
+              <th>Payable</th>
+              <th>Remaining</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" placeholder="Member Name"></td>
+              <td><input type="number" value="0" min="0"></td>
+              <td><input type="number" value="0" min="0"></td>
+              <td><input type="number" value="0" min="0"></td>
+              <td class="breakfast-col" style="display:none;"><input type="number" value="0" min="0"></td>
+              <td class="payable">0.00</td>
+              <td class="remaining">0.00</td>
+              <td><button class="btn btn-danger" onclick="removeMember(this)"><i class="fas fa-trash"></i> <span class="btn-text">Remove</span></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="btn btn-full" onclick="addMember()"><i class="fas fa-user-plus"></i> Add Member</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-calculator"></i>
+        Calculation & Results
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-success" onclick="calculate()"><i class="fas fa-calculator"></i> <span class="btn-text">Calculate</span></button>
+        <button class="btn btn-warning" onclick="resetForm()"><i class="fas fa-redo"></i> <span class="btn-text">Reset</span></button>
+        <button class="btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> <span class="btn-text">Download PDF</span></button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <div class="instructions">
+      <h4><i class="fas fa-info-circle"></i> How to Use This System</h4>
+      <ul>
+        <li>Enter your mess details and select the month for calculation</li>
+        <li>Set the total cost and meal percentages (day/night/breakfast)</li>
+        <li>Add all members with their deposits and meal counts</li>
+        <li>Click "Calculate" to see individual payable amounts and remaining balances</li>
+        <li>Download a PDF report for record keeping</li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>Smart Mess Calculation System &copy; 2023 | Designed by Hafizur Rahman</p>
+    </footer>
+  </div>
+
+  <!-- jsPDF & autoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <script>
+    // Set default month to current month
+    document.addEventListener('DOMContentLoaded', function() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      document.getElementById('month').value = `${year}-${month}`;
+      
+      // Hide button text on small screens
+      const updateButtonText = () => {
+        const btnTexts = document.querySelectorAll('.btn-text');
+        if (window.innerWidth < 480) {
+          btnTexts.forEach(text => text.style.display = 'none');
+        } else {
+          btnTexts.forEach(text => text.style.display = 'inline');
+        }
+      };
+      
+      updateButtonText();
+      window.addEventListener('resize', updateButtonText);
+    });
+
+    function toggleBreakfast(toggle) {
+      let show = toggle.checked;
+      document.querySelectorAll(".breakfast-col").forEach(col => {
+        col.style.display = show ? "" : "none";
+      });
+      document.getElementById("breakfastDiv").style.display = show ? "" : "none";
+      syncPercent("day"); // re-sync percentages
+    }
+
+    function syncPercent(changed) {
+      let day = document.getElementById("dayPercent");
+      let night = document.getElementById("nightPercent");
+      let breakfast = document.getElementById("breakfastPercent");
+      let breakfastOn = document.getElementById("breakfastToggle").checked;
+
+      if (breakfastOn) {
+        let d = parseFloat(day.value) || 0;
+        let n = parseFloat(night.value) || 0;
+        let b = parseFloat(breakfast.value) || 0;
+
+        if (changed === "day") {
+          night.value = (100 - d - b >= 0) ? (100 - d - b) : 0;
+        } else if (changed === "night") {
+          day.value = (100 - n - b >= 0) ? (100 - n - b) : 0;
+        } else if (changed === "breakfast") {
+          day.value = (100 - b - (parseFloat(night.value) || 0));
+        }
+      } else {
+        if (changed === "day") night.value = 100 - (parseFloat(day.value) || 0);
+        else day.value = 100 - (parseFloat(night.value) || 0);
+      }
+    }
+
+    function addMember() {
+      let breakfastOn = document.getElementById("breakfastToggle").checked;
+      let row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="text" placeholder="Member Name"></td>
+        <td><input type="number" value="0" min="0"></td>
+        <td><input type="number" value="0" min="0"></td>
+        <td><input type="number" value="0" min="0"></td>
+        <td class="breakfast-col" style="${breakfastOn ? "" : "display:none;"}"><input type="number" value="0" min="0"></td>
+        <td class="payable">0.00</td>
+        <td class="remaining">0.00</td>
+        <td><button class="btn btn-danger" onclick="removeMember(this)"><i class="fas fa-trash"></i> <span class="btn-text">Remove</span></button></td>
+      `;
+      document.querySelector("#memberTable tbody").appendChild(row);
+    }
+
+    function removeMember(button) {
+      if (document.querySelectorAll("#memberTable tbody tr").length > 1) {
+        button.closest("tr").remove();
+      } else {
+        alert("You need at least one member in the mess.");
+      }
+    }
+
+    function resetForm() {
+      if (confirm("Are you sure you want to reset all data? This action cannot be undone.")) {
+        document.getElementById("messName").value = "Hafiz";
+        document.getElementById("totalCost").value = "";
+        document.getElementById("dayPercent").value = "45";
+        document.getElementById("nightPercent").value = "55";
+        document.getElementById("breakfastPercent").value = "0";
+        document.getElementById("breakfastToggle").checked = false;
+        toggleBreakfast(document.getElementById("breakfastToggle"));
+        
+        // Reset member table to one row with default values
+        const tbody = document.querySelector("#memberTable tbody");
+        tbody.innerHTML = `
+          <tr>
+            <td><input type="text" placeholder="Member Name"></td>
+            <td><input type="number" value="0" min="0"></td>
+            <td><input type="number" value="0" min="0"></td>
+            <td><input type="number" value="0" min="0"></td>
+            <td class="breakfast-col" style="display:none;"><input type="number" value="0" min="0"></td>
+            <td class="payable">0.00</td>
+            <td class="remaining">0.00</td>
+            <td><button class="btn btn-danger" onclick="removeMember(this)"><i class="fas fa-trash"></i> <span class="btn-text">Remove</span></button></td>
+          </tr>
+        `;
+        
+        document.getElementById("result").style.display = "none";
+      }
+    }
+
+    function calculate() {
+      let totalCost = parseFloat(document.getElementById("totalCost").value) || 0;
+      let dp = parseFloat(document.getElementById("dayPercent").value) || 0;
+      let np = parseFloat(document.getElementById("nightPercent").value) || 0;
+      let bp = document.getElementById("breakfastToggle").checked ? parseFloat(document.getElementById("breakfastPercent").value) || 0 : 0;
+
+      let rows = document.querySelectorAll("#memberTable tbody tr");
+
+      let totalDay = 0, totalNight = 0, totalBreakfast = 0;
+      rows.forEach(r => {
+        totalDay += parseFloat(r.cells[2].children[0].value) || 0;
+        totalNight += parseFloat(r.cells[3].children[0].value) || 0;
+        if (document.getElementById("breakfastToggle").checked) {
+          totalBreakfast += parseFloat(r.cells[4].children[0].value) || 0;
+        }
+      });
+
+      let denominator = (dp * totalDay) + (np * totalNight) + (bp * totalBreakfast);
+      let dayRate = denominator ? (dp * totalCost) / denominator : 0;
+      let nightRate = denominator ? (np * totalCost) / denominator : 0;
+      let breakfastRate = denominator ? (bp * totalCost) / denominator : 0;
+
+      let totalDeposit = 0, totalPayable = 0, totalRemaining = 0;
+
+      rows.forEach(r => {
+        let deposit = parseFloat(r.cells[1].children[0].value) || 0;
+        let dayMeals = parseFloat(r.cells[2].children[0].value) || 0;
+        let nightMeals = parseFloat(r.cells[3].children[0].value) || 0;
+        let breakfastMeals = document.getElementById("breakfastToggle").checked ? (parseFloat(r.cells[4].children[0].value) || 0) : 0;
+
+        let payable = (dayMeals * dayRate) + (nightMeals * nightRate) + (breakfastMeals * breakfastRate);
+        let remaining = deposit - payable;
+
+        r.querySelector(".payable").textContent = payable.toFixed(2);
+        r.querySelector(".remaining").innerHTML =
+          remaining >= 0
+            ? `<span class="status-positive">${remaining.toFixed(2)}</span>`
+            : `<span class="status-negative">${remaining.toFixed(2)}</span>`;
+
+        totalDeposit += deposit;
+        totalPayable += payable;
+        totalRemaining += remaining;
+      });
+
+      document.getElementById("result").style.display = "block";
+      document.getElementById("result").innerHTML = `
+        <h3><i class="fas fa-chart-bar"></i> Calculation Summary</h3>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">Day Meal Rate</div>
+            <div class="summary-value">${dayRate.toFixed(2)}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Night Meal Rate</div>
+            <div class="summary-value">${nightRate.toFixed(2)}</div>
+          </div>
+          ${document.getElementById("breakfastToggle").checked ? `
+          <div class="summary-item">
+            <div class="summary-label">Breakfast Rate</div>
+            <div class="summary-value">${breakfastRate.toFixed(2)}</div>
+          </div>
+          ` : ''}
+          <div class="summary-item">
+            <div class="summary-label">Total Deposit</div>
+            <div class="summary-value">${totalDeposit.toFixed(2)}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Total Payable</div>
+            <div class="summary-value">${totalPayable.toFixed(2)}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Net Balance</div>
+            <div class="summary-value ${totalRemaining >= 0 ? 'status-positive' : 'status-negative'}">${totalRemaining.toFixed(2)}</div>
+          </div>
+        </div>
+        <p style="margin-top: 15px; font-size: 0.9rem; color: var(--muted);">
+          <i class="fas fa-info-circle"></i> Positive balance indicates surplus, negative indicates deficit.
+        </p>
+      `;
+
+      window.summaryData = { 
+        dayRate, 
+        nightRate, 
+        breakfastRate, 
+        totalDeposit, 
+        totalPayable, 
+        totalRemaining,
+        messName: document.getElementById("messName").value || "-",
+        month: document.getElementById("month").value || "-",
+        totalDay,
+        totalNight,
+        totalBreakfast,
+        totalCost
+      };
+    }
+
+    function downloadPDF() {
+      if (!window.summaryData) {
+        alert("Please calculate first before downloading PDF.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      let messName = window.summaryData.messName;
+      let month = window.summaryData.month;
+
+      // Header
+      doc.setFillColor(79, 70, 229);
+      doc.rect(0, 0, 210, 30, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.text("Mess Meal Calculation Summary", 105, 15, { align: 'center' });
+      
+      // Mess info
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(12);
+      doc.text(`Mess: ${messName}`, 14, 40);
+      doc.text(`Month: ${month}`, 14, 47);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 54);
+
+      // Member table - using the original format
+      let rows = document.querySelectorAll("#memberTable tbody tr");
+      let tableData = [];
+      rows.forEach(r => {
+        let name = r.cells[0].children[0].value || "-";
+        let deposit = r.cells[1].children[0].value;
+        let dayMeals = r.cells[2].children[0].value;
+        let nightMeals = r.cells[3].children[0].value;
+        let breakfastMeals = document.getElementById("breakfastToggle").checked ? r.cells[4].children[0].value : "-";
+        let payable = r.querySelector(".payable").textContent;
+        let remaining = r.querySelector(".remaining").textContent;
+
+        tableData.push([name, deposit, dayMeals, nightMeals, breakfastMeals, payable, remaining]);
+      });
+
+      doc.autoTable({
+        startY: 60,
+        head: [["Name", "Deposit", "Day Meals", "Night Meals", "Breakfast", "Payable", "Remaining"]],
+        body: tableData,
+        theme: "grid",
+        styles: { fontSize: 10, halign: "center", valign: "middle" },
+        headStyles: { fillColor: [79, 70, 229], textColor: 255, fontStyle: "bold" },
+        bodyStyles: { textColor: [55, 65, 81] },
+        alternateRowStyles: { fillColor: [243, 244, 246] },
+      });
+
+      // Summary section - clean and professional
+      let y = doc.lastAutoTable.finalY + 10;
+      doc.setFontSize(14);
+      doc.setTextColor(79, 70, 229);
+      doc.text("Summary Information", 14, y);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      y += 7;
+      doc.text(`Day Meal Rate: ${window.summaryData.dayRate.toFixed(2)}`, 14, y);
+      y += 5;
+      doc.text(`Night Meal Rate: ${window.summaryData.nightRate.toFixed(2)}`, 14, y);
+      y += 5;
+      if (document.getElementById("breakfastToggle").checked) {
+        doc.text(`Breakfast Rate: ${window.summaryData.breakfastRate.toFixed(2)}`, 14, y);
+        y += 5;
+      }
+      doc.text(`Total Deposit: ${window.summaryData.totalDeposit.toFixed(2)}`, 14, y);
+      y += 5;
+      doc.text(`Total Payable: ${window.summaryData.totalPayable.toFixed(2)}`, 14, y);
+      y += 5;
+      doc.text(`Net Balance: ${window.summaryData.totalRemaining.toFixed(2)}`, 14, y);
+      
+      // Usage instructions
+      y += 10;
+      doc.setFontSize(11);
+      doc.setTextColor(79, 70, 229);
+      doc.text("How to Use This System", 14, y);
+      
+      doc.setFontSize(9);
+      doc.setTextColor(0, 0, 0);
+      y += 6;
+      doc.text("1. Enter your mess details and select the month for calculation", 14, y);
+      y += 5;
+      doc.text("2. Set the total cost and meal percentages (day/night/breakfast)", 14, y);
+      y += 5;
+      doc.text("3. Add all members with their deposits and meal counts", 14, y);
+      y += 5;
+      doc.text("4. Click 'Calculate' to see individual payable amounts and remaining balances", 14, y);
+      y += 5;
+      doc.text("5. Download a PDF report for record keeping", 14, y);
+      
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(100, 100, 100);
+      doc.text("Generated by Smart Mess Calculation System | Designed by Hafizur Rahman", 105, 290, { align: 'center' });
+
+      doc.save(`Mess_Summary_${messName}_${month}.pdf`);
+    }
+  </script>
+</body>
+</html>
