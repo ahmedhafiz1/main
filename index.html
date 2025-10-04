@@ -21,6 +21,7 @@
       --success: #16a34a;
       --shadow: 0 4px 20px rgba(0,0,0,0.08);
       --radius: 12px;
+      --radius-lg: 16px;
     }
     
     * { 
@@ -43,7 +44,7 @@
       margin: auto;
       background: var(--card-bg);
       padding: 20px; 
-      border-radius: var(--radius);
+      border-radius: var(--radius-lg);
       box-shadow: var(--shadow);
     }
     
@@ -252,12 +253,13 @@
       gap: 6px;
       font-size: 0.85rem;
       white-space: nowrap;
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
     }
     
     .btn:hover { 
       background: var(--primary-dark); 
       transform: translateY(-2px); 
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
     
     .btn:active { 
@@ -266,14 +268,17 @@
     
     .btn-danger { 
       background: var(--danger); 
+      box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
     }
     
     .btn-success { 
       background: var(--success); 
+      box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
     }
     
     .btn-warning { 
       background: var(--warning); 
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
     }
     
     .btn-full {
@@ -282,13 +287,48 @@
       margin: 8px 0;
     }
     
+    /* Enhanced Results Section */
+    .calculation-section {
+      margin-top: 20px;
+    }
+    
     .result {
       margin-top: 20px; 
-      padding: 15px; 
-      background: #eef2ff;
+      padding: 20px; 
+      background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
       border-left: 4px solid var(--primary); 
-      border-radius: 10px;
+      border-radius: 12px;
       display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .result-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .result-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .result-actions .btn {
+      margin: 0;
+      font-size: 0.8rem;
+      padding: 8px 12px;
     }
     
     .status-positive { 
@@ -310,19 +350,67 @@
     
     .summary-item {
       background: white;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 15px;
+      border-radius: 10px;
       text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .summary-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     
     .summary-value {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 700;
       margin: 5px 0;
     }
     
     .summary-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    
+    .rate-breakdown {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .rate-breakdown h4 {
+      margin-bottom: 12px;
+      color: var(--primary);
+      font-size: 1rem;
+    }
+    
+    .rate-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .rate-item {
+      flex: 1;
+      min-width: 120px;
+      padding: 10px;
+      background: var(--primary-light);
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .rate-value {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    
+    .rate-label {
       font-size: 0.8rem;
       color: var(--muted);
     }
@@ -426,25 +514,43 @@
         font-size: 0.8rem;
       }
       
+      .result {
+        padding: 15px;
+      }
+      
+      .result-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .result-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
       .summary-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
       }
       
       .summary-item {
-        padding: 10px;
+        padding: 12px;
       }
       
       .summary-value {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
       }
       
       .summary-label {
         font-size: 0.75rem;
       }
       
-      .result {
-        padding: 12px;
+      .rate-list {
+        flex-direction: column;
+      }
+      
+      .rate-item {
+        min-width: 100%;
       }
     }
     
@@ -497,6 +603,15 @@
       
       .btn-full {
         width: 100%;
+      }
+      
+      .result-actions {
+        flex-direction: column;
+      }
+      
+      .result-actions .btn {
+        width: 100%;
+        justify-content: center;
       }
     }
     
@@ -626,7 +741,7 @@
       <button class="btn btn-full" onclick="addMember()"><i class="fas fa-user-plus"></i> Add Member</button>
     </div>
 
-    <div class="card">
+    <div class="card calculation-section">
       <div class="card-title">
         <i class="fas fa-calculator"></i>
         Calculation & Results
@@ -814,20 +929,49 @@
 
       document.getElementById("result").style.display = "block";
       document.getElementById("result").innerHTML = `
-        <h3><i class="fas fa-chart-bar"></i> Calculation Summary</h3>
+        <div class="result-header">
+          <div class="result-title">
+            <i class="fas fa-chart-bar"></i> Calculation Summary
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-success" onclick="calculate()"><i class="fas fa-sync-alt"></i> Recalculate</button>
+            <button class="btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> Export PDF</button>
+          </div>
+        </div>
+        
+        <div class="rate-breakdown">
+          <h4><i class="fas fa-chart-line"></i> Meal Rates</h4>
+          <div class="rate-list">
+            <div class="rate-item">
+              <div class="rate-value">${dayRate.toFixed(2)}</div>
+              <div class="rate-label">Day Meal Rate</div>
+            </div>
+            <div class="rate-item">
+              <div class="rate-value">${nightRate.toFixed(2)}</div>
+              <div class="rate-label">Night Meal Rate</div>
+            </div>
+            ${document.getElementById("breakfastToggle").checked ? `
+            <div class="rate-item">
+              <div class="rate-value">${breakfastRate.toFixed(2)}</div>
+              <div class="rate-label">Breakfast Rate</div>
+            </div>
+            ` : ''}
+          </div>
+        </div>
+        
         <div class="summary-grid">
           <div class="summary-item">
-            <div class="summary-label">Day Meal Rate</div>
-            <div class="summary-value">${dayRate.toFixed(2)}</div>
+            <div class="summary-label">Total Day Meals</div>
+            <div class="summary-value">${totalDay}</div>
           </div>
           <div class="summary-item">
-            <div class="summary-label">Night Meal Rate</div>
-            <div class="summary-value">${nightRate.toFixed(2)}</div>
+            <div class="summary-label">Total Night Meals</div>
+            <div class="summary-value">${totalNight}</div>
           </div>
           ${document.getElementById("breakfastToggle").checked ? `
           <div class="summary-item">
-            <div class="summary-label">Breakfast Rate</div>
-            <div class="summary-value">${breakfastRate.toFixed(2)}</div>
+            <div class="summary-label">Total Breakfast</div>
+            <div class="summary-value">${totalBreakfast}</div>
           </div>
           ` : ''}
           <div class="summary-item">
@@ -843,6 +987,7 @@
             <div class="summary-value ${totalRemaining >= 0 ? 'status-positive' : 'status-negative'}">${totalRemaining.toFixed(2)}</div>
           </div>
         </div>
+        
         <p style="margin-top: 15px; font-size: 0.9rem; color: var(--muted);">
           <i class="fas fa-info-circle"></i> Positive balance indicates surplus, negative indicates deficit.
         </p>
